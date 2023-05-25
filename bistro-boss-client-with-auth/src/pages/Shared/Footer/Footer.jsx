@@ -9,7 +9,7 @@ const Footer = () => {
           <p> Mon - Fri: 08:00 - 22:00</p>
           <p> Sat - Sun: 10:00 - 23:00</p>
         </div>
-        <di>
+        <div>
           <h2 className="text-2xl">Follow US</h2>
           <p>Join us on social media</p>
           <div className="grid grid-flow-col gap-4">
@@ -47,7 +47,7 @@ const Footer = () => {
               </svg>
             </a>
           </div>
-        </di>
+        </div>
       </div>
       <div className="p-4 footer-center bg-slate-950 text-white">
         <div>

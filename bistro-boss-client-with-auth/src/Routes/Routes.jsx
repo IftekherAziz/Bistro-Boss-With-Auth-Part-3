@@ -3,11 +3,15 @@ import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
 import Menu from "../pages/Menu/Menu/Menu";
 import Order from "../pages/Order/Order/Order";
+import Login from "../pages/Login/Login";
+import Error from "../pages/Error/Error";
+import SignUp from "../pages/SignUp/SignUp";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <Error></Error>,
     children: [
       {
         path: "/",
@@ -21,6 +25,14 @@ export const router = createBrowserRouter([
         path: "/order/:category",
         element: <Order></Order>
       },
+      {
+        path: "/login",
+        element: <Login></Login>
+      },
+      {
+        path: "/signup",
+        element: <SignUp></SignUp>
+      }
     ],
   },
 ]);

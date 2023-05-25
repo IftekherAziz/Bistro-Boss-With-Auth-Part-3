@@ -1,2 +1,1 @@
-# Module 76
- Authentication
+# Module 76: Authentication

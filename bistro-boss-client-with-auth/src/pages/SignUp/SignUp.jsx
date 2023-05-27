@@ -1,39 +1,75 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import signUpBg from "../../assets/account/account_bg.png";
 import signUpImg from "../../assets/account/authentication2.png";
 
 const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <>
       <Helmet>
         <title>Bistro Boss | SignUp</title>
       </Helmet>
-      <div
-        className="hero min-h-screen bg-base-200"
-        style={{
-          backgroundImage: `url("${signUpBg}")`,
-
-          backgroundSize: "cover",
-        }}
-      >
-        <div className="hero-content flex-col md:flex-row-reverse shadow-2xl p-20">
+      <div className="hero min-h-screen">
+        <div
+          className="hero-content flex-col md:flex-row-reverse shadow-lg p-20"
+          style={{
+            backgroundImage: `url("${signUpBg}")`,       
+          }}
+        >
           <div className="text-center md:w-1/2 lg:text-left">
             <h1 className="text-5xl font-bold text-center my-10">SignUp</h1>
             <img src={signUpImg} alt="Register Image" />
           </div>
-          <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body">
+          <div className=" md:w-1/2 max-w-xl border shadow-xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
                 </label>
                 <input
                   type="text"
+                  {...register("name", { required: true })}
                   name="name"
                   placeholder="Name"
                   className="input input-bordered"
                 />
+                {errors.name && (
+                  <span className="text-red-600">Name is required</span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Photo URL</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("photoURL", {
+                    required: true,
+                    pattern: {
+                      value:
+                        /^(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)$/,
+                      message: "Please enter a valid image URL",
+                    },
+                  })}
+                  placeholder="Photo URL"
+                  className="input input-bordered"
+                  required
+                />
+                {errors.photoURL && (
+                  <span className="text-red-600">
+                    Please enter a valid image URL
+                  </span>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -41,10 +77,14 @@ const SignUp = () => {
                 </label>
                 <input
                   type="email"
+                  {...register("email", { required: true })}
                   name="email"
-                  placeholder="Email"
+                  placeholder="email"
                   className="input input-bordered"
                 />
+                {errors.email && (
+                  <span className="text-red-600">Email is required</span>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -52,20 +92,38 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
-                  name="password"
-                  placeholder="Password"
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    maxLength: 20,
+                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+                  })}
+                  placeholder="password"
                   className="input input-bordered"
                 />
+                {errors.password?.type === "required" && (
+                  <p className="text-red-600">Password is required</p>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <p className="text-red-600">Password must be 6 characters</p>
+                )}
+                {errors.password?.type === "maxLength" && (
+                  <p className="text-red-600">
+                    Password must be less than 20 characters
+                  </p>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <p className="text-red-600">
+                    Password must have one Uppercase one lower case, one number
+                    and one special character.
+                  </p>
+                )}
                 <label className="label">
-                  <a
-                    href="#"
-                    className="label-text-alt font-medium link link-hover"
-                  >
+                  <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
                   </a>
                 </label>
               </div>
-
               <div className="form-control mt-6">
                 <input
                   className="btn btn-primary"

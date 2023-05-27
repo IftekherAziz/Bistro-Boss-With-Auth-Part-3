@@ -57,16 +57,20 @@ const Login = () => {
       <Helmet>
         <title>Bistro Boss | Login</title>
       </Helmet>
-      <div
-        className="hero min-h-screen bg-base-200"
-        style={{
-          backgroundImage: `url("${loginBg}")`,
+      <div className="hero min-h-screen">
+        <div
+          className="hero-content flex-col md:flex-row-reverse shadow-lg p-20"
+          style={{
+            backgroundImage: `url("${loginBg}")`,
 
-          backgroundSize: "cover",
-        }}
-      >
-        <div className="hero-content flex-col md:flex-row-reverse shadow-2xl p-20">
-          <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+            backgroundSize: "cover",
+          }}
+        >
+          <div className="text-center md:w-1/2 lg:text-left">
+            <h1 className="text-5xl font-bold text-center my-10">Login</h1>
+            <img src={loginImg} alt="Login Image" />
+          </div>
+          <div className="md:w-1/2 max-w-xl border shadow-xl">
             <form onSubmit={handleLogin} className="card-body">
               <div className="form-control">
                 <label className="label">
@@ -127,10 +131,6 @@ const Login = () => {
                 </Link>{" "}
               </small>
             </p>
-          </div>
-          <div className="text-center md:w-1/2 lg:text-left">
-            <h1 className="text-5xl font-bold text-center my-10">Login</h1>
-            <img src={loginImg} alt="Login Image" />
           </div>
         </div>
       </div>

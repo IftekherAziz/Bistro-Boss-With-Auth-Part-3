@@ -1,8 +1,11 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import signUpBg from "../../assets/account/account_bg.png";
 import signUpImg from "../../assets/account/authentication2.png";
+import { AuthContext } from "../../providers/AuthProviders";
+import { useContext } from "react";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const {
@@ -12,7 +15,34 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const onSubmit = (data) => {
+    console.log(data);
+
+    createUser(data.email, data.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        updateUserProfile(data.name, data.photo).then(() => {
+          console.log("Profile updated");
+          reset();
+           Swal.fire({
+             position: "top-end",
+             icon: "success",
+             title: "User created successfully.",
+             showConfirmButton: false,
+             timer: 1500,
+           });
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -23,7 +53,7 @@ const SignUp = () => {
         <div
           className="hero-content flex-col md:flex-row-reverse shadow-lg p-20"
           style={{
-            backgroundImage: `url("${signUpBg}")`,       
+            backgroundImage: `url("${signUpBg}")`,
           }}
         >
           <div className="text-center md:w-1/2 lg:text-left">
@@ -58,7 +88,6 @@ const SignUp = () => {
                     pattern: {
                       value:
                         /^(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)$/,
-                      message: "Please enter a valid image URL",
                     },
                   })}
                   placeholder="Photo URL"
@@ -79,7 +108,7 @@ const SignUp = () => {
                   type="email"
                   {...register("email", { required: true })}
                   name="email"
-                  placeholder="email"
+                  placeholder="Email"
                   className="input input-bordered"
                 />
                 {errors.email && (
@@ -98,7 +127,7 @@ const SignUp = () => {
                     maxLength: 20,
                     pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
                   })}
-                  placeholder="password"
+                  placeholder="Password"
                   className="input input-bordered"
                 />
                 {errors.password?.type === "required" && (

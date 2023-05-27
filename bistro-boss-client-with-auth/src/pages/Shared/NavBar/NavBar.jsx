@@ -29,6 +29,9 @@ const NavBar = () => {
       <li>
         <Link>Contact us</Link>
       </li>
+      <li>
+        <Link to="secret">Secret</Link>
+      </li>
     </>
   );
 

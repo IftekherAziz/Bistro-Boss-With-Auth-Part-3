@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -9,11 +9,16 @@ import {
 import { AuthContext } from "../../providers/AuthProviders";
 import loginBg from "../../assets/account/account_bg.png";
 import loginImg from "../../assets/account/authentication2.png";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [disabled, setDisabled] = useState(true);
 
   const { signIn } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   // Captcha engine config (optional)
   useEffect(() => {
@@ -26,25 +31,33 @@ const Login = () => {
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    // console.log(email, password);
 
     // Sign in user with email and password
     signIn(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
+        Swal.fire({
+          title: "User Login Successful.",
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
+        });
+        navigate(from, { replace: true });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        console.log(error);
       });
   };
 
   // Validate captcha input value
   const handleValidateCaptcha = (e) => {
     const user_captcha_value = e.target.value;
-    console.log(user_captcha_value);
+    // console.log(user_captcha_value);
     if (validateCaptcha(user_captcha_value)) {
       setDisabled(false);
     } else {
